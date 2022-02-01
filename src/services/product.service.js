@@ -1,14 +1,16 @@
 const faker = require('faker');
 const boom = require('@hapi/boom');
-const sequilize = require('../libs/sequelize');
-class ProductService {
+
+const { models } = require('../libs/sequelize');
+
+class ProductsService {
 
   constructor(){
     this.products = [];
     this.generate();
   }
 
-  async generate() {
+  generate() {
     const limit = 100;
     for (let index = 0; index < limit; index++) {
       this.products.push({
@@ -22,18 +24,15 @@ class ProductService {
   }
 
   async create(data) {
-    const newProduct = {
-      id: faker.datatype.uuid(),
-      ...data
-    }
-    this.products.push(newProduct);
+    const newProduct = await models.Product.create(data);
     return newProduct;
   }
 
   async find() {
-    const query = 'SELECT * FROM tasks';
-    const [data] = await sequilize.query(query);
-    return data;
+    const products = await models.Product.findAll({
+      include: ['category']
+    });
+    return products;
   }
 
   async findOne(id) {
@@ -68,6 +67,7 @@ class ProductService {
     this.products.splice(index, 1);
     return { id };
   }
+
 }
 
-module.exports = ProductService;
+module.exports = ProductsService;
