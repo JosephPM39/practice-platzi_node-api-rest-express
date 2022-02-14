@@ -7,6 +7,7 @@ const {
   getOrderSchema,
   createOrderSchema,
   addItemSchema,
+  updateOrderSchema
 } = require('../schemas/order.schema');
 
 
@@ -49,6 +50,21 @@ router.post(
       const body = req.body;
       const newItem = await service.addItem(body);
       res.status(201).json(newItem);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.patch('/:id',
+  validatorHandler(getOrderSchema, 'params'),
+  validatorHandler(updateOrderSchema, 'body'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const body = req.body;
+      const orden = await service.update(id, body);
+      res.json(orden);
     } catch (error) {
       next(error);
     }

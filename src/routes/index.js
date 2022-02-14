@@ -5,19 +5,21 @@ const customersRouter = require('./customer.router');
 const categoriesRouter = require('./categories.router');
 const orderRouter = require('./orders.router');
 const authRouter = require('./auth.router');
+const profileRouter = require('./profile.router');
 
 function routerApi(app) {
-    //ruta padre
-    const router = express.Router();
-    app.use('/api/v1', router);
+  //ruta padre
+  const router = express.Router();
+  app.use('/api/v1', router);
 
-    //demás rutas
-    router.use('/products', productsRouter);
-    router.use('/categories', categoriesRouter);
-    router.use('/users', usersRouter);
-    router.use('/orders', orderRouter);
-    router.use('/customers', customersRouter);
-    router.use('/auth', authRouter);
+  //demás rutas
+  router.use('/products', productsRouter);
+  router.use('/categories', categoriesRouter);
+  router.use('/users', usersRouter);
+  router.use('/orders', orderRouter);
+  router.use('/customers', customersRouter);
+  router.use('/auth', authRouter);
+  router.use('/profile', profileRouter);
 }
 
 module.exports = routerApi;
