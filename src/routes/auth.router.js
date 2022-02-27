@@ -3,12 +3,14 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 
 const { config } = require('./../config/config');
+const AuthService = require('../services/auth.service');
 
 
 const router = express.Router();
+const service = new AuthService();
 
 router.post('/login',
-  passport.authenticate('local', {session: false}),
+  passport.authenticate('local', { session: false }),
   async (req, res, next) => {
     try {
       const user = req.user;
@@ -26,5 +28,15 @@ router.post('/login',
     }
   }
 );
+
+router.post('/recovery', async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const rta = await service.sendRecovery(email);
+    res.json(rta);
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = router;
